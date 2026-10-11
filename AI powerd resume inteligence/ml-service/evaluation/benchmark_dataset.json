@@ -1,0 +1,542 @@
+[
+  {
+    "id": 1,
+    "domain": "Java Backend",
+    "sub_category": "Exact Match - Senior",
+    "resume": "Senior Java Software Engineer with 7 years of experience building high-throughput microservices using Spring Boot, Spring Security, Hibernate, MySQL, Kafka, and Docker. Led architectural redesign reducing API latency by 40%.",
+    "job_description": "We are looking for a Senior Java Developer with strong expertise in Spring Boot, REST APIs, Microservices, MySQL, and Kafka. Experience in cloud deployment and Docker containerization is required.",
+    "human_match_score": 95.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 2,
+    "domain": "Java Backend",
+    "sub_category": "Partial Match - Junior to Mid",
+    "resume": "Junior Java Developer with 1.5 years of experience in Core Java, Spring MVC, basic SQL queries, Git, and JUnit testing. Assisted in building internal admin portals.",
+    "job_description": "Lead Java Architect needed to design distributed microservices, Spring Cloud architecture, Kafka event streaming, and high-concurrency database optimizations.",
+    "human_match_score": 45.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 3,
+    "domain": "Java Backend",
+    "sub_category": "Framework Nuance - Spring to Jakarta EE",
+    "resume": "Java Enterprise Developer with 5 years in Jakarta EE, EJB, Hibernate, Oracle DB, and WebLogic application server. Skilled in enterprise transactional systems.",
+    "job_description": "Modern Java Backend Engineer experienced in Spring Boot, REST microservices, PostgreSQL, Docker, and Kubernetes for cloud-native applications.",
+    "human_match_score": 70.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 4,
+    "domain": "Java Backend",
+    "sub_category": "Strong Match - Mid-Level",
+    "resume": "Java Developer with 3.5 years developing RESTful web services with Spring Boot, JPA, MySQL, Redis cache, and Maven. Experienced in writing unit tests with Mockito.",
+    "job_description": "Java Backend Developer: 3+ years experience with Spring Boot, REST APIs, relational databases (MySQL/Postgres), Redis, and automated unit testing.",
+    "human_match_score": 90.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 5,
+    "domain": "Java Backend",
+    "sub_category": "Skill Gap - Missing Kafka/Distributed",
+    "resume": "Java Spring Boot Developer with experience in building monolithic web apps, Thymeleaf, Spring Data JPA, and PostgreSQL database queries.",
+    "job_description": "Senior Distributed Systems Engineer: Java 17, Spring Boot microservices, Apache Kafka event-driven architectures, and Docker container orchestration.",
+    "human_match_score": 62.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 6,
+    "domain": "Python / Backend",
+    "sub_category": "Exact Match - FastAPI & Microservices",
+    "resume": "Python Backend Engineer with 4 years building asynchronous REST APIs using FastAPI, Pydantic, SQLAlchemy, PostgreSQL, Redis, and Docker. Implemented OAuth2 JWT authentication.",
+    "job_description": "Looking for a Python Developer specializing in FastAPI, async programming, PostgreSQL, Redis caching, and Docker microservices architecture.",
+    "human_match_score": 94.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 7,
+    "domain": "Python / Backend",
+    "sub_category": "Framework Transfer - Django to FastAPI",
+    "resume": "Python Web Developer with 4 years building web applications with Django, Django REST Framework, Celery, PostgreSQL, and AWS S3.",
+    "job_description": "FastAPI Backend Developer required to build high-performance async microservices with PostgreSQL, Redis, and Docker.",
+    "human_match_score": 75.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 8,
+    "domain": "Python / Backend",
+    "sub_category": "Scripting/Automation to Backend Dev",
+    "resume": "Python Automation Specialist with experience writing web scrapers with BeautifulSoup, Selenium, and basic Bash scripts for data extraction.",
+    "job_description": "Senior Python Backend Engineer: Complex system design, distributed asynchronous microservices, FastAPI/Django, and high-throughput SQL databases.",
+    "human_match_score": 38.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 9,
+    "domain": "Python / Backend",
+    "sub_category": "Strong Match - Full Stack Python",
+    "resume": "Python Developer proficient in Flask, FastAPI, SQLAlchemy, MySQL, Docker, and React frontend integration for SaaS dashboards.",
+    "job_description": "Python Software Engineer: Experience with Flask/FastAPI, relational database design (MySQL/PostgreSQL), RESTful API integration, and containerization.",
+    "human_match_score": 88.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 10,
+    "domain": "Python / Backend",
+    "sub_category": "Cross-Language Transition - Python applying to Go",
+    "resume": "Senior Python Backend Engineer with 6 years building microservices in FastAPI, asyncio, PostgreSQL, and Docker. Eager to learn Golang.",
+    "job_description": "Golang Backend Engineer with 4+ years dedicated experience in Go concurrency, goroutines, gRPC, and Kubernetes microservices.",
+    "human_match_score": 52.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 11,
+    "domain": "Frontend Development",
+    "sub_category": "Exact Match - Senior React",
+    "resume": "Lead Frontend Engineer with 6 years experience in React, TypeScript, Redux Toolkit, Tailwind CSS, Next.js, and Webpack. Built responsive enterprise SPAs.",
+    "job_description": "Senior React Engineer needed to architect complex React/TypeScript applications with Next.js, Tailwind CSS, Redux, and modern state management.",
+    "human_match_score": 96.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 12,
+    "domain": "Frontend Development",
+    "sub_category": "Framework Transfer - Angular to React",
+    "resume": "Frontend Developer with 4 years building single page applications using Angular, TypeScript, RxJS, HTML5, CSS3, and NgRx state management.",
+    "job_description": "React Frontend Developer: 3+ years experience with React, TypeScript, state management, and modern component-driven UI development.",
+    "human_match_score": 72.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 13,
+    "domain": "Frontend Development",
+    "sub_category": "Basic Web to Modern Framework",
+    "resume": "Web Designer with 2 years creating WordPress landing pages, HTML5, CSS3, jQuery, and basic Bootstrap templates.",
+    "job_description": "Senior Frontend Architect: React 18, TypeScript, Next.js SSR, GraphQL, performance profiling, and micro-frontend architecture.",
+    "human_match_score": 32.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 14,
+    "domain": "Frontend Development",
+    "sub_category": "Strong Match - Mid-Level React",
+    "resume": "Frontend Developer with 3 years building web apps using React, JavaScript, HTML5, CSS3, Tailwind CSS, Axios, and Git.",
+    "job_description": "React Developer: 2-4 years building user interfaces with React, JavaScript, modern CSS/Tailwind, REST API consumption, and version control.",
+    "human_match_score": 91.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 15,
+    "domain": "Frontend Development",
+    "sub_category": "Vue to React Transition",
+    "resume": "Frontend Developer with 3 years experience building SPAs in Vue.js, Vuex, Pinia, TypeScript, and Tailwind CSS with Vite tooling.",
+    "job_description": "Frontend Engineer: Strong experience with modern JavaScript frameworks (React or Vue), TypeScript, CSS frameworks, and SPA state architecture.",
+    "human_match_score": 82.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 16,
+    "domain": "Full-Stack Development",
+    "sub_category": "Exact Match - React & Node",
+    "resume": "Full Stack Developer proficient in React.js, TypeScript, Tailwind CSS, Node.js, Express, and PostgreSQL. Created modern responsive dashboards and integrated RESTful APIs with JWT authentication.",
+    "job_description": "Seeking a Frontend/Fullstack Engineer skilled in React, JavaScript/TypeScript, modern CSS frameworks, and backend Node.js APIs with relational database experience.",
+    "human_match_score": 93.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 17,
+    "domain": "Full-Stack Development",
+    "sub_category": "Exact Match - Spring Boot & React",
+    "resume": "Full Stack Engineer with 4 years building enterprise solutions using Java, Spring Boot, Hibernate, MySQL, React, Redux, and Docker.",
+    "job_description": "Full Stack Java Developer: Strong proficiency in Spring Boot backend services, MySQL database design, and React frontend user interfaces.",
+    "human_match_score": 95.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 18,
+    "domain": "Full-Stack Development",
+    "sub_category": "Backend Heavy Full Stack",
+    "resume": "Backend Engineer with 5 years in Java, Spring Boot, MySQL, Kafka, and minor experience with internal React admin pages.",
+    "job_description": "Full Stack Developer with equal focus on advanced React UI animations, CSS design systems, and Node.js microservices.",
+    "human_match_score": 65.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 19,
+    "domain": "Full-Stack Development",
+    "sub_category": "Frontend Heavy Full Stack",
+    "resume": "Frontend Developer with 4 years React, Next.js, TypeScript, and basic experience writing simple Express.js CRUD endpoints.",
+    "job_description": "Full Stack Engineer needed to design distributed database schemas, microservice orchestration, and complex React UI workflows.",
+    "human_match_score": 64.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 20,
+    "domain": "Full-Stack Development",
+    "sub_category": "MERN Stack Match",
+    "resume": "MERN Stack Developer with 3 years building web apps using MongoDB, Express.js, React, Node.js, Redux, and Docker containers.",
+    "job_description": "Full Stack JavaScript Developer: Expertise in MERN stack (Node.js, Express, React, MongoDB), RESTful API development, and Docker.",
+    "human_match_score": 92.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 21,
+    "domain": "Machine Learning & NLP",
+    "sub_category": "Exact Match - NLP Specialist",
+    "resume": "ML/NLP Engineer experienced in PyTorch, Hugging Face Transformers, Sentence-BERT, spaCy, and scikit-learn. Implemented semantic search, named entity recognition, and document similarity pipelines with FastAPI.",
+    "job_description": "Hiring an AI/NLP Specialist to design transformer-based embedding pipelines, semantic similarity algorithms, and text extraction services using PyTorch and FastAPI.",
+    "human_match_score": 96.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 22,
+    "domain": "Machine Learning & NLP",
+    "sub_category": "Computer Vision to NLP Mismatch",
+    "resume": "Computer Vision Engineer with 4 years in PyTorch, OpenCV, YOLO object detection, image segmentation, and CUDA GPU acceleration.",
+    "job_description": "Natural Language Processing Scientist: Large Language Models, Transformer tokenizers, Sentence-BERT embeddings, and text classification.",
+    "human_match_score": 58.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 23,
+    "domain": "Machine Learning & NLP",
+    "sub_category": "Data Science / Tabular ML Match",
+    "resume": "Data Scientist with 3 years experience building predictive models using Python, scikit-learn, pandas, NumPy, XGBoost, LightGBM, and SQL.",
+    "job_description": "Machine Learning Engineer: Tabular predictive modeling, feature engineering with pandas/NumPy, scikit-learn algorithms, and model evaluation.",
+    "human_match_score": 90.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 24,
+    "domain": "Machine Learning & NLP",
+    "sub_category": "Deep Learning / LLM Engineer",
+    "resume": "AI Research Engineer with expertise in PyTorch, Transformers, LLM fine-tuning (LoRA, QLoRA), vector databases (Pinecone, Milvus), and LangChain.",
+    "job_description": "Generative AI Engineer: Hands-on experience with Transformer architectures, PyTorch, embedding generation, vector databases, and RAG pipelines.",
+    "human_match_score": 94.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 25,
+    "domain": "Machine Learning & NLP",
+    "sub_category": "BI / Data Analyst to Deep Learning",
+    "resume": "Data Analyst with 3 years building PowerBI dashboards, Tableau visual reports, Excel macros, and standard SQL queries for business metrics.",
+    "job_description": "Deep Learning Scientist: PyTorch neural networks, Transformer fine-tuning, vector embeddings, and mathematical loss function optimization.",
+    "human_match_score": 30.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 26,
+    "domain": "DevOps & Cloud",
+    "sub_category": "Exact Match - AWS DevOps",
+    "resume": "DevOps Engineer with deep experience in AWS (EC2, S3, RDS, Lambda), Docker, Kubernetes, Terraform, CI/CD pipelines with GitHub Actions, and Linux infrastructure management.",
+    "job_description": "Looking for a Cloud DevOps Engineer to build automated CI/CD pipelines, manage Kubernetes clusters on AWS, and maintain infrastructure as code using Terraform.",
+    "human_match_score": 95.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 27,
+    "domain": "DevOps & Cloud",
+    "sub_category": "Cloud Platform Transfer - Azure to AWS",
+    "resume": "Cloud Infrastructure Engineer with 4 years specializing in Microsoft Azure, ARM templates, Azure DevOps pipelines, Docker, and AKS Kubernetes clusters.",
+    "job_description": "Senior AWS Cloud Engineer: Amazon Web Services (EC2, EKS, RDS), Terraform IaC, Jenkins/GitHub Actions CI/CD, and Docker containerization.",
+    "human_match_score": 76.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 28,
+    "domain": "DevOps & Cloud",
+    "sub_category": "System Admin to SRE/Kubernetes",
+    "resume": "Linux System Administrator with 5 years managing on-premise CentOS/RHEL servers, Bash shell scripts, Apache HTTPD, and user permissions.",
+    "job_description": "Site Reliability Engineer: Kubernetes cluster orchestration, Terraform automation, Prometheus/Grafana monitoring, and cloud-native CI/CD on GCP.",
+    "human_match_score": 54.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 29,
+    "domain": "DevOps & Cloud",
+    "sub_category": "Strong Match - Mid-Level DevOps",
+    "resume": "DevOps Specialist: Docker, Kubernetes, Jenkins, Git, Linux, Bash scripting, and CI/CD automated pipeline development.",
+    "job_description": "DevOps Engineer: Experience with Docker containers, Kubernetes orchestration, Jenkins CI/CD automation, and Linux server environments.",
+    "human_match_score": 91.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 30,
+    "domain": "DevOps & Cloud",
+    "sub_category": "Security / DevSecOps Match",
+    "resume": "DevSecOps Engineer with experience in Terraform, AWS security groups, container scanning with Trivy, Docker, Kubernetes, and automated CI/CD security gates.",
+    "job_description": "Cloud Security DevOps Engineer: Infrastructure as Code (Terraform), AWS cloud security, container vulnerability scanning, and secure CI/CD pipelines.",
+    "human_match_score": 93.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 31,
+    "domain": "Database & Data Engineering",
+    "sub_category": "Exact Match - Data Engineer",
+    "resume": "Data Engineer with 4 years building scalable ETL pipelines using Python, Apache Spark, Kafka, SQL, PostgreSQL, and AWS S3 data lakes.",
+    "job_description": "Senior Data Engineer: Expertise in Python data pipelines, Apache Spark distributed processing, Kafka real-time streaming, and SQL data warehousing.",
+    "human_match_score": 94.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 32,
+    "domain": "Database & Data Engineering",
+    "sub_category": "Database Administrator (DBA) Match",
+    "resume": "Database Administrator with 6 years experience in MySQL, PostgreSQL, performance tuning, query optimization, indexing strategies, replication, and backup recovery.",
+    "job_description": "Lead DBA: MySQL and PostgreSQL database administration, performance tuning, slow query optimization, indexing, and high-availability clustering.",
+    "human_match_score": 95.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 33,
+    "domain": "Database & Data Engineering",
+    "sub_category": "SQL Analyst to Big Data Engineer",
+    "resume": "SQL Developer with experience writing stored procedures, complex joins, and ETL views in MS SQL Server for financial reporting.",
+    "job_description": "Big Data Architect: Apache Spark, Scala/Python distributed computing, Hadoop ecosystem, Kafka event streaming, and NoSQL databases.",
+    "human_match_score": 52.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 34,
+    "domain": "Database & Data Engineering",
+    "sub_category": "NoSQL / Distributed DB Match",
+    "resume": "Backend & Database Engineer with expertise in MongoDB, Redis caching, Elasticsearch distributed indexing, PostgreSQL, and Node.js.",
+    "job_description": "Database & Search Engineer: NoSQL databases (MongoDB), in-memory caching (Redis), and Elasticsearch full-text search engine integration.",
+    "human_match_score": 92.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 35,
+    "domain": "Database & Data Engineering",
+    "sub_category": "Relational to NoSQL Gap",
+    "resume": "Relational Database Specialist with 4 years experience exclusively in Oracle DB and PostgreSQL schema design and PL/SQL scripting.",
+    "job_description": "Distributed NoSQL Engineer: MongoDB, Cassandra, Redis, DynamoDB distributed key-value stores, and eventual consistency models.",
+    "human_match_score": 58.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 36,
+    "domain": "QA & Test Automation",
+    "sub_category": "Exact Match - SDET",
+    "resume": "SDET / QA Automation Engineer with 4 years experience in Java, Selenium WebDriver, TestNG, JUnit, RestAssured API testing, and Jenkins CI integration.",
+    "job_description": "Software Development Engineer in Test (SDET): Java automated testing, Selenium, REST API automation (RestAssured/Postman), JUnit, and CI/CD integration.",
+    "human_match_score": 94.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 37,
+    "domain": "QA & Test Automation",
+    "sub_category": "Python QA Automation",
+    "resume": "QA Engineer with 3 years building automated test suites using Python, PyTest, Selenium, Postman API collections, and Git.",
+    "job_description": "Automation QA Engineer: Python automation frameworks, PyTest, UI testing with Selenium, and automated API verification.",
+    "human_match_score": 92.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 38,
+    "domain": "QA & Test Automation",
+    "sub_category": "Manual QA to Automation SDET",
+    "resume": "Manual QA Tester with 3 years experience writing test cases, executing regression test plans in Jira, and defect logging for web applications.",
+    "job_description": "Lead SDET: Building test automation frameworks from scratch using Java/Python, Selenium, PyTest/JUnit, and CI/CD pipeline automation.",
+    "human_match_score": 42.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 39,
+    "domain": "QA & Test Automation",
+    "sub_category": "Frontend Testing Specialist",
+    "resume": "Frontend QA Engineer proficient in Cypress, Playwright, Jest, React Testing Library, JavaScript, and CI/CD test workflows.",
+    "job_description": "Frontend Test Automation Engineer: End-to-end testing with Cypress/Playwright, unit testing with Jest, and JavaScript web application testing.",
+    "human_match_score": 93.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 40,
+    "domain": "QA & Test Automation",
+    "sub_category": "Performance Testing Match",
+    "resume": "Performance Test Engineer with 4 years in Apache JMeter, LoadRunner, Gatling, performance bottleneck analysis, and API stress testing.",
+    "job_description": "Performance & Load Testing Specialist: JMeter scripting, server performance profiling, stress testing REST APIs, and load test reports.",
+    "human_match_score": 94.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 41,
+    "domain": "Cross-Domain Mismatch",
+    "sub_category": "Sales Representative applying to Java Developer",
+    "resume": "Sales Account Executive with 5 years exceeding B2B software sales quotas, CRM management in Salesforce, lead generation, and client relationship building.",
+    "job_description": "Senior Java Backend Engineer: Core Java, Spring Boot, microservices architecture, MySQL, Kafka, and Docker containerization.",
+    "human_match_score": 8.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 42,
+    "domain": "Cross-Domain Mismatch",
+    "sub_category": "Registered Nurse applying to DevOps Engineer",
+    "resume": "Registered Nurse (RN) with 6 years experience in ICU patient care, electronic medical records (EMR), triage, medical protocol compliance, and emergency response.",
+    "job_description": "Cloud DevOps Engineer: Kubernetes cluster management, AWS EC2/S3, Terraform IaC, Jenkins CI/CD, and Linux system administration.",
+    "human_match_score": 5.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 43,
+    "domain": "Cross-Domain Mismatch",
+    "sub_category": "Graphic Designer applying to Machine Learning",
+    "resume": "Creative Graphic Designer with 4 years expertise in Adobe Photoshop, Illustrator, Figma UI mockups, typography, and brand identity design.",
+    "job_description": "Machine Learning Engineer: PyTorch neural networks, NLP transformer fine-tuning, scikit-learn algorithms, and mathematical optimization.",
+    "human_match_score": 12.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 44,
+    "domain": "Cross-Domain Mismatch",
+    "sub_category": "Financial Accountant applying to Frontend React",
+    "resume": "Certified Public Accountant (CPA) with 5 years in financial audit, tax preparation, general ledger reconciliation, GAAP compliance, and QuickBooks.",
+    "job_description": "Frontend Web Developer: React.js, TypeScript, Tailwind CSS, Redux, REST API consumption, and responsive web interface design.",
+    "human_match_score": 6.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 45,
+    "domain": "Cross-Domain Mismatch",
+    "sub_category": "Executive Assistant applying to Data Engineer",
+    "resume": "Executive Assistant with 4 years managing calendar scheduling, travel arrangements, corporate correspondence, office logistics, and meeting minutes.",
+    "job_description": "Data Engineer: Apache Spark, Python ETL pipelines, SQL data warehouse modeling, Kafka streaming, and AWS cloud infrastructure.",
+    "human_match_score": 7.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 46,
+    "domain": "Cross-Domain Mismatch",
+    "sub_category": "Culinary Chef applying to Database Administrator",
+    "resume": "Head Executive Chef with 8 years in fine dining kitchen management, food inventory control, recipe creation, and health code compliance.",
+    "job_description": "Senior MySQL DBA: Database replication, query optimization, high availability clustering, backup restoration, and disaster recovery.",
+    "human_match_score": 4.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 47,
+    "domain": "Cross-Domain Mismatch",
+    "sub_category": "Frontend UI applying to Deep Learning / NLP",
+    "resume": "Frontend UI Developer with 2 years of experience crafting user interfaces with HTML5, CSS3, Bootstrap, and basic JavaScript. Worked on marketing websites.",
+    "job_description": "Deep Learning Scientist needed for training large language models, PyTorch distributed computing, fine-tuning BERT transformers, and vector retrieval.",
+    "human_match_score": 18.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 48,
+    "domain": "Cross-Domain Mismatch",
+    "sub_category": "iOS Mobile applying to Distributed Backend",
+    "resume": "iOS Swift Developer with 3 years building consumer mobile apps, SwiftUI, CoreData, Xcode, and App Store deployments.",
+    "job_description": "Principal Backend Architect for Java Spring Boot microservices, high-throughput distributed database sharding, and Kafka streaming pipelines.",
+    "human_match_score": 25.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 49,
+    "domain": "Cross-Domain Mismatch",
+    "sub_category": "Hardware Technician applying to React Developer",
+    "resume": "Computer Hardware Technician: PC assembly, motherboard diagnostics, network cabling (RJ45, CAT6), OS formatting, and peripheral repair.",
+    "job_description": "Frontend React Developer: React hooks, TypeScript, component state management, CSS modules, and web API integration.",
+    "human_match_score": 15.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 50,
+    "domain": "Cross-Domain Mismatch",
+    "sub_category": "Civil Engineer applying to Security Engineer",
+    "resume": "Civil Site Engineer with 5 years in AutoCAD structural drawings, concrete quality inspection, foundation survey, and construction site safety.",
+    "job_description": "Application Security Engineer: Penetration testing, OWASP Top 10 mitigation, static code analysis, cryptography, and vulnerability remediation.",
+    "human_match_score": 6.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 51,
+    "domain": "Cybersecurity & Infrastructure",
+    "sub_category": "Exact Match - AppSec Engineer",
+    "resume": "Application Security Specialist with 4 years in vulnerability assessment, OWASP Top 10 remediation, penetration testing, SonarQube static analysis, and secure coding practices.",
+    "job_description": "AppSec Engineer: Experience with OWASP security guidelines, SAST/DAST tools, vulnerability triage, penetration testing, and code review.",
+    "human_match_score": 94.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 52,
+    "domain": "Cybersecurity & Infrastructure",
+    "sub_category": "SOC Analyst to AppSec Mismatch",
+    "resume": "SOC Analyst with 2 years monitoring SIEM alerts in Splunk, phishing email triage, and incident response ticketing.",
+    "job_description": "Lead Application Security Architect: Software threat modeling, cryptography implementation, secure CI/CD pipelines, and source code security audits.",
+    "human_match_score": 48.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 53,
+    "domain": "Cybersecurity & Infrastructure",
+    "sub_category": "Network Security Match",
+    "resume": "Network Security Engineer with experience configuring Cisco firewalls, VPN tunnels, IDS/IPS systems, Wireshark packet analysis, and network segmentation.",
+    "job_description": "Network Infrastructure & Security Engineer: Firewall configuration, VPN architecture, network traffic inspection, and intrusion prevention systems.",
+    "human_match_score": 92.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 54,
+    "domain": "Mobile Development",
+    "sub_category": "Exact Match - Android Kotlin",
+    "resume": "Android Developer with 4 years building mobile apps using Kotlin, Android SDK, Jetpack Compose, Coroutines, Retrofit, and Room database.",
+    "job_description": "Senior Android Engineer: Kotlin, modern Jetpack Compose UI architecture, REST API integration with Retrofit, and local persistence with Room.",
+    "human_match_score": 95.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 55,
+    "domain": "Mobile Development",
+    "sub_category": "Cross-Platform Flutter Match",
+    "resume": "Mobile Application Developer with 3 years experience in Flutter, Dart, Bloc state management, Firebase integration, and cross-platform publishing.",
+    "job_description": "Flutter Developer: Expertise in Dart, Flutter cross-platform mobile frameworks, state management (Bloc/Provider), and REST API integration.",
+    "human_match_score": 94.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 56,
+    "domain": "Mobile Development",
+    "sub_category": "Android Native applying to React Native",
+    "resume": "Native Android Developer with 4 years in Java, Kotlin, Android Studio, XML layouts, and Gradle build configurations.",
+    "job_description": "React Native Mobile Developer: JavaScript/TypeScript, React Native CLI, Redux, iOS and Android cross-platform bridging.",
+    "human_match_score": 68.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 57,
+    "domain": "C++ & Systems Programming",
+    "sub_category": "Exact Match - Embedded Systems",
+    "resume": "Systems Software Engineer with 5 years in C++, C, Linux kernel modules, multithreading, memory management, and low-latency network sockets.",
+    "job_description": "Embedded / Systems C++ Developer: Modern C++ (14/17), POSIX multithreading, memory optimization, Linux systems programming, and low-level protocols.",
+    "human_match_score": 95.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 58,
+    "domain": "C++ & Systems Programming",
+    "sub_category": "C++ to Web Backend Transition",
+    "resume": "C++ Game Programmer with experience in Unreal Engine 4, 3D graphics math, physics simulation, and memory allocators.",
+    "job_description": "Java Spring Boot Cloud Backend Developer: RESTful microservices, MySQL database design, Docker, and AWS deployments.",
+    "human_match_score": 40.0,
+    "ground_truth_class": 0
+  },
+  {
+    "id": 59,
+    "domain": "Product & Agile Tech Management",
+    "sub_category": "Exact Match - Technical Product Manager",
+    "resume": "Technical Product Manager with 5 years leading agile software sprints, writing user stories, roadmap planning in Jira, API specifications, and stakeholder management.",
+    "job_description": "Technical Product Manager (TPM): Agile scrum leadership, product backlog grooming, PRD authoring, technical architecture understanding, and feature delivery.",
+    "human_match_score": 93.0,
+    "ground_truth_class": 1
+  },
+  {
+    "id": 60,
+    "domain": "Product & Agile Tech Management",
+    "sub_category": "Scrum Master to Hands-on Developer Mismatch",
+    "resume": "Agile Scrum Master with 4 years facilitating sprint ceremonies, daily standups, retrospectives, and removing team impediments in Jira.",
+    "job_description": "Hands-on Full Stack Developer: Writing clean Java/Spring Boot code, building React frontend components, SQL queries, and CI/CD pipelines.",
+    "human_match_score": 30.0,
+    "ground_truth_class": 0
+  }
+]

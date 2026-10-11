@@ -1,0 +1,37 @@
+{
+  "num_samples": 60,
+  "continuous_metrics": {
+    "mae_tfidf": 56.298,
+    "mae_transformer": 15.557,
+    "mse_tfidf": 3809.879,
+    "mse_transformer": 335.725,
+    "rmse_tfidf": 61.724,
+    "rmse_transformer": 18.323,
+    "pearson_tfidf": 0.8019,
+    "pearson_transformer": 0.9042,
+    "spearman_tfidf": 0.7999,
+    "spearman_transformer": 0.789
+  },
+  "classification_metrics": {
+    "tfidf": {
+      "accuracy": 38.33,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "tp": 0,
+      "fp": 0,
+      "tn": 23,
+      "fn": 37
+    },
+    "transformer": {
+      "accuracy": 90.0,
+      "precision": 96.97,
+      "recall": 86.49,
+      "f1": 91.43,
+      "tp": 32,
+      "fp": 1,
+      "tn": 22,
+      "fn": 5
+    }
+  }
+}
