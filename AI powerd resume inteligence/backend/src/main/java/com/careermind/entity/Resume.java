@@ -63,6 +63,10 @@ public class Resume {
     @Builder.Default
     private String status = "PROCESSED";
 
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean archived = false;
+
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<ResumeSkill> resumeSkills = new ArrayList<>();

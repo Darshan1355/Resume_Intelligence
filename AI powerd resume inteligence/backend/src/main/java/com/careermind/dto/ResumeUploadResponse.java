@@ -18,6 +18,7 @@ public class ResumeUploadResponse {
     private Long fileSize;
     private int extractedTextLength;
     private String status;
+    private boolean archived;
     private String candidateName;
     private String candidateEmail;
     private Double candidateExperienceYears;

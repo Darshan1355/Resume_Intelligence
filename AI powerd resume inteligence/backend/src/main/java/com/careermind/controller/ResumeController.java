@@ -33,9 +33,24 @@ public class ResumeController {
 
     @GetMapping
     @Operation(summary = "List user's uploaded resumes", description = "Returns all resumes owned by the authenticated user")
-    public ResponseEntity<List<ResumeSummaryDto>> getUserResumes() {
-        List<ResumeSummaryDto> resumes = resumeService.getUserResumes();
+    public ResponseEntity<List<ResumeSummaryDto>> getUserResumes(
+            @RequestParam(defaultValue = "false") boolean archived) {
+        List<ResumeSummaryDto> resumes = resumeService.getUserResumes(archived);
         return ResponseEntity.ok(resumes);
+    }
+
+    @PostMapping("/{id}/archive")
+    @Operation(summary = "Archive resume", description = "Removes a resume from the active list while preserving its interview and matching history")
+    public ResponseEntity<Map<String, String>> archiveResume(@PathVariable Long id) {
+        resumeService.archiveResume(id);
+        return ResponseEntity.ok(Map.of("message", "Resume archived. Its interview and matching history remains available."));
+    }
+
+    @PostMapping("/{id}/restore")
+    @Operation(summary = "Restore archived resume", description = "Restores an archived resume to the active resume list")
+    public ResponseEntity<Map<String, String>> restoreResume(@PathVariable Long id) {
+        resumeService.restoreResume(id);
+        return ResponseEntity.ok(Map.of("message", "Resume restored to your active list."));
     }
 
     @GetMapping("/{id}")
@@ -46,7 +61,7 @@ public class ResumeController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete resume", description = "Securely removes resume file and associated records owned by the authenticated user")
+    @Operation(summary = "Delete resume", description = "Deletes an owned resume only when it has no interview or job-matching history")
     public ResponseEntity<Map<String, String>> deleteResume(@PathVariable Long id) {
         resumeService.deleteResume(id);
         return ResponseEntity.ok(Map.of("message", "Resume successfully deleted"));

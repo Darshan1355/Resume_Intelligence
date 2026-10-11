@@ -2,6 +2,7 @@ package com.careermind.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -29,6 +30,32 @@ public class GlobalExceptionHandler {
                         .status(HttpStatus.NOT_FOUND.value())
                         .error("NOT_FOUND")
                         .message(ex.getMessage())
+                        .path(request.getRequestURI())
+                        .build());
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ErrorResponse> handleConflict(ConflictException ex, HttpServletRequest request) {
+        log.warn("Request conflicts with existing data: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ErrorResponse.builder()
+                        .timestamp(Instant.now())
+                        .status(HttpStatus.CONFLICT.value())
+                        .error("CONFLICT")
+                        .message(ex.getMessage())
+                        .path(request.getRequestURI())
+                        .build());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
+        log.warn("Request violates a data relationship constraint: {}", ex.getMostSpecificCause().getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ErrorResponse.builder()
+                        .timestamp(Instant.now())
+                        .status(HttpStatus.CONFLICT.value())
+                        .error("CONFLICT")
+                        .message("This record is linked to other data and cannot be deleted.")
                         .path(request.getRequestURI())
                         .build());
     }

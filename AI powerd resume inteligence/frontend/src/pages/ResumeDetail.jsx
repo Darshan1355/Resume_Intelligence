@@ -116,6 +116,7 @@ export const ResumeDetail = () => {
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">{resume.fileName}</h1>
               <Badge variant="success" size="sm">{resume.status}</Badge>
+              {resume.archived && <Badge variant="default" size="sm">Archived</Badge>}
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Parsed Candidate Document &bull; {resume.skills?.length || 0} Skills Extracted

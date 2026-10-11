@@ -11,8 +11,11 @@ import com.careermind.entity.Resume;
 import com.careermind.entity.ResumeSkill;
 import com.careermind.entity.Skill;
 import com.careermind.entity.User;
+import com.careermind.exception.ConflictException;
 import com.careermind.exception.ResourceNotFoundException;
 import com.careermind.exception.UnauthorizedException;
+import com.careermind.repository.InterviewSessionRepository;
+import com.careermind.repository.MatchResultRepository;
 import com.careermind.repository.ResumeRepository;
 import com.careermind.repository.SkillRepository;
 import com.careermind.util.FileStorageUtil;
@@ -33,6 +36,8 @@ import java.util.List;
 public class ResumeService {
 
     private final ResumeRepository resumeRepository;
+        private final InterviewSessionRepository interviewSessionRepository;
+        private final MatchResultRepository matchResultRepository;
     private final SkillRepository skillRepository;
     private final AuthService authService;
     private final PdfExtractorUtil pdfExtractorUtil;
@@ -122,6 +127,7 @@ public class ResumeService {
                 .fileSize(savedResume.getFileSize())
                 .extractedTextLength(savedResume.getRawText().length())
                 .status(savedResume.getStatus())
+                .archived(savedResume.isArchived())
                 .candidateName(savedResume.getCandidateName())
                 .candidateEmail(savedResume.getCandidateEmail())
                 .candidateExperienceYears(savedResume.getCandidateExperienceYears())
@@ -133,8 +139,13 @@ public class ResumeService {
 
     @Transactional(readOnly = true)
     public List<ResumeSummaryDto> getUserResumes() {
+                return getUserResumes(false);
+        }
+
+        @Transactional(readOnly = true)
+        public List<ResumeSummaryDto> getUserResumes(boolean archived) {
         User currentUser = authService.getAuthenticatedUserEntity();
-        List<Resume> resumes = resumeRepository.findByUserIdOrderByCreatedAtDesc(currentUser.getId());
+                List<Resume> resumes = resumeRepository.findByUserIdAndArchivedOrderByCreatedAtDesc(currentUser.getId(), archived);
         return resumes.stream()
                 .map(r -> ResumeSummaryDto.builder()
                         .id(r.getId())
@@ -145,6 +156,7 @@ public class ResumeService {
                         .candidateExperienceYears(r.getCandidateExperienceYears())
                         .skillsCount(r.getResumeSkills() != null ? r.getResumeSkills().size() : 0)
                         .status(r.getStatus())
+                        .archived(r.isArchived())
                         .createdAt(r.getCreatedAt())
                         .build())
                 .toList();
@@ -179,11 +191,38 @@ public class ResumeService {
                 .candidateExperienceYears(resume.getCandidateExperienceYears())
                 .parsedSections(resume.getParsedSections())
                 .status(resume.getStatus())
+                .archived(resume.isArchived())
                 .skills(skills)
                 .createdAt(resume.getCreatedAt())
                 .updatedAt(resume.getUpdatedAt())
                 .build();
     }
+
+        @Transactional
+        public void archiveResume(Long id) {
+                setResumeArchived(id, true);
+        }
+
+        @Transactional
+        public void restoreResume(Long id) {
+                setResumeArchived(id, false);
+        }
+
+        private void setResumeArchived(Long id, boolean archived) {
+                User currentUser = authService.getAuthenticatedUserEntity();
+                Resume resume = resumeRepository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException("Resume not found with id: " + id));
+
+                if (!resume.getUser().getId().equals(currentUser.getId())) {
+                        throw new UnauthorizedException("You do not have permission to update this resume");
+                }
+
+                if (resume.isArchived() != archived) {
+                        resume.setArchived(archived);
+                        resumeRepository.save(resume);
+                        log.info("{} resume ID: {} for user ID: {}", archived ? "Archived" : "Restored", id, currentUser.getId());
+                }
+        }
 
     @Transactional
     public void deleteResume(Long id) {
@@ -195,8 +234,13 @@ public class ResumeService {
             throw new UnauthorizedException("You do not have permission to delete this resume");
         }
 
-        fileStorageUtil.deleteFile(resume.getStoredFileName());
+        if (interviewSessionRepository.existsByResumeId(id) || matchResultRepository.existsByResumeId(id)) {
+            throw new ConflictException("This resume is linked to interview or job-matching history and cannot be deleted. Archive it to remove it from your active list while preserving that history.");
+        }
+
         resumeRepository.delete(resume);
+        resumeRepository.flush();
+        fileStorageUtil.deleteFile(resume.getStoredFileName());
         log.info("Deleted resume ID: {} for user ID: {}", id, currentUser.getId());
     }
 

@@ -39,7 +39,7 @@ public class RecommendationService {
             resume = resumeRepository.findByIdAndUserIdWithSkills(resumeId, currentUser.getId())
                     .orElseThrow(() -> new BadRequestException("Resume not found with id: " + resumeId));
         } else {
-            List<Resume> userResumes = resumeRepository.findByUserIdOrderByCreatedAtDesc(currentUser.getId());
+            List<Resume> userResumes = resumeRepository.findByUserIdAndArchivedOrderByCreatedAtDesc(currentUser.getId(), false);
             if (userResumes.isEmpty()) {
                 throw new BadRequestException("Please upload a resume first to receive personalized AI job recommendations.");
             }

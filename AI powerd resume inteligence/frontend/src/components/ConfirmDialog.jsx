@@ -12,6 +12,7 @@ export const ConfirmDialog = ({
   confirmText = 'Confirm',
   confirmVariant = 'danger',
   loading = false,
+  errorMessage = '',
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="max-w-md">
@@ -25,6 +26,12 @@ export const ConfirmDialog = ({
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{message}</p>
           </div>
         </div>
+
+        {errorMessage && (
+          <p role="alert" className="rounded-lg border border-rose-200 bg-rose-50 p-3 text-left text-xs text-rose-700 dark:border-rose-800 dark:bg-rose-950/40 dark:text-rose-300">
+            {errorMessage}
+          </p>
+        )}
 
         <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
           <Button variant="outline" size="sm" onClick={onClose} disabled={loading}>

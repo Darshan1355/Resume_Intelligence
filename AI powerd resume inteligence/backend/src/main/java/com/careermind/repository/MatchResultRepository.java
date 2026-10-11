@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface MatchResultRepository extends JpaRepository<MatchResult, Long> {
     List<MatchResult> findByUserIdOrderByCreatedAtDesc(Long userId);
     List<MatchResult> findByResumeIdOrderByCreatedAtDesc(Long resumeId);
+    boolean existsByResumeId(Long resumeId);
     Optional<MatchResult> findByIdAndUserId(Long id, Long userId);
 
     @Query("SELECT m FROM MatchResult m LEFT JOIN FETCH m.skillResults sr LEFT JOIN FETCH sr.skill WHERE m.id = :id AND m.user.id = :userId")

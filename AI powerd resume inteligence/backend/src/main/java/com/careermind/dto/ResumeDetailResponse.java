@@ -24,6 +24,7 @@ public class ResumeDetailResponse {
     private Double candidateExperienceYears;
     private String parsedSections;
     private String status;
+    private boolean archived;
     private List<SkillDto> skills;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

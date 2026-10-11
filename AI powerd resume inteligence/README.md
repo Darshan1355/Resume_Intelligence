@@ -177,9 +177,14 @@ Questions are dynamically generated across technical domains tailored to candida
 
 ### Resumes (`/api/resumes`)
 - `POST /api/resumes/upload` — Multipart PDF upload, Apache PDFBox text extraction & NLP parsing.
-- `GET /api/resumes` — List current user's resumes.
+- `GET /api/resumes` — List active resumes owned by the current user.
+- `GET /api/resumes?archived=true` — List the current user's archived resumes.
 - `GET /api/resumes/{id}` — Get detailed resume and extracted skills.
-- `DELETE /api/resumes/{id}` — Delete resume and associated file securely.
+- `POST /api/resumes/{id}/archive` — Remove a resume from the active list while preserving history.
+- `POST /api/resumes/{id}/restore` — Return an archived resume to the active list.
+- `DELETE /api/resumes/{id}` — Permanently delete a resume only when no interview or matching history references it; otherwise returns `409 Conflict`.
+
+For an existing MySQL database, apply `database/migrations/V2__archive_resumes.sql` once before deploying this version. Fresh databases should use the updated `database/schema.sql`.
 
 ### Jobs (`/api/jobs`)
 - `POST /api/jobs` — Create job posting with manual or auto-extracted skills.

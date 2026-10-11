@@ -20,5 +20,6 @@ public class ResumeSummaryDto {
     private Double candidateExperienceYears;
     private int skillsCount;
     private String status;
+    private boolean archived;
     private LocalDateTime createdAt;
 }

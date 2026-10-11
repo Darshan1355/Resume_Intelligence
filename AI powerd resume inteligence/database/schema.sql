@@ -44,10 +44,12 @@ CREATE TABLE IF NOT EXISTS resumes (
     candidate_experience_years DOUBLE DEFAULT 0.0,
     parsed_sections JSON,
     status VARCHAR(50) NOT NULL DEFAULT 'PROCESSED',
+    archived BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_resumes_user_id (user_id)
+    INDEX idx_resumes_user_id (user_id),
+    INDEX idx_resumes_user_archived_created (user_id, archived, created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 4. Resume Skills Table (Skills extracted from resume)

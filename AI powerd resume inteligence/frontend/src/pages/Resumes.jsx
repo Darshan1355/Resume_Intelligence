@@ -25,6 +25,7 @@ import {
 export const Resumes = () => {
   const [resumes, setResumes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [archivedView, setArchivedView] = useState(false);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
 
   // Upload State
@@ -35,16 +36,17 @@ export const Resumes = () => {
   const [processingStatus, setProcessingStatus] = useState(''); // 'uploading' | 'parsing' | 'extracting' | 'done'
   const [error, setError] = useState('');
 
-  // Delete State
-  const [deleteId, setDeleteId] = useState(null);
-  const [deleting, setDeleting] = useState(false);
+  const [pendingAction, setPendingAction] = useState(null);
+  const [actionError, setActionError] = useState('');
+  const [actionLoading, setActionLoading] = useState(false);
+  const [restoringId, setRestoringId] = useState(null);
 
   const toast = useToast();
   const navigate = useNavigate();
 
-  const fetchResumes = async () => {
+  const fetchResumes = async (archived = archivedView) => {
     try {
-      const res = await resumeApi.getAll();
+      const res = await resumeApi.getAll(archived);
       setResumes(res.data);
     } catch (err) {
       console.error('Failed to load resumes:', err);
@@ -55,8 +57,9 @@ export const Resumes = () => {
   };
 
   useEffect(() => {
-    fetchResumes();
-  }, []);
+    setLoading(true);
+    fetchResumes(archivedView);
+  }, [archivedView]);
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -132,7 +135,8 @@ export const Resumes = () => {
         setSelectedFile(null);
         setUploading(false);
         setUploadProgress(0);
-        fetchResumes();
+        setArchivedView(false);
+        fetchResumes(false);
         navigate(`/resumes/${res.data.resumeId}`);
       }, 700);
     } catch (err) {
@@ -143,18 +147,48 @@ export const Resumes = () => {
     }
   };
 
-  const confirmDelete = async () => {
-    if (!deleteId) return;
-    setDeleting(true);
+  const confirmResumeAction = async () => {
+    if (!pendingAction) return;
+    setActionLoading(true);
+    setActionError('');
     try {
-      await resumeApi.delete(deleteId);
-      toast.success('Resume deleted successfully.');
-      setResumes((prev) => prev.filter((r) => r.id !== deleteId));
-      setDeleteId(null);
+      if (pendingAction.type === 'archive') {
+        await resumeApi.archive(pendingAction.id);
+        toast.success('Resume archived. Its interview and matching history is preserved.');
+      } else {
+        await resumeApi.delete(pendingAction.id);
+        toast.success('Resume permanently deleted.');
+      }
+      setResumes((prev) => prev.filter((resume) => resume.id !== pendingAction.id));
+      setPendingAction(null);
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to delete resume.');
+      if (err.response?.status === 409) {
+        setActionError(err.response?.data?.message || 'This resume is linked to interview or matching history. Archive it to keep the history and remove it from your active list.');
+      } else {
+        toast.error(err.response?.data?.message || 'Could not update this resume. Please try again.');
+      }
     } finally {
-      setDeleting(false);
+      setActionLoading(false);
+    }
+  };
+
+  const restoreResume = async (id) => {
+    setRestoringId(id);
+    try {
+      await resumeApi.restore(id);
+      setResumes((prev) => prev.filter((resume) => resume.id !== id));
+      toast.success('Resume restored to your active list.');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Could not restore this resume. Please try again.');
+    } finally {
+      setRestoringId(null);
+    }
+  };
+
+  const closeActionDialog = () => {
+    if (!actionLoading) {
+      setPendingAction(null);
+      setActionError('');
     }
   };
 
@@ -167,12 +201,31 @@ export const Resumes = () => {
         <div className="space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">My Resumes</h1>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Manage your parsed candidate documents, extracted skills, and NER profiles.
+            Manage your resumes and keep interview and matching history available when archived.
           </p>
         </div>
         <Button icon={Upload} onClick={() => setUploadModalOpen(true)}>
           Upload Resume
         </Button>
+      </div>
+
+      <div className="flex gap-1 border-b border-slate-200 dark:border-slate-800" role="tablist" aria-label="Resume status">
+        {[{ label: 'Active', archived: false }, { label: 'Archived', archived: true }].map((tab) => (
+          <button
+            key={tab.label}
+            type="button"
+            role="tab"
+            aria-selected={archivedView === tab.archived}
+            onClick={() => setArchivedView(tab.archived)}
+            className={`border-b-2 px-4 py-2 text-sm font-semibold transition-colors ${
+              archivedView === tab.archived
+                ? 'border-brand-600 text-brand-700 dark:text-brand-400'
+                : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
       {/* Resumes Grid */}
@@ -182,17 +235,23 @@ export const Resumes = () => {
             <ResumeCard
               key={resume.id}
               resume={resume}
-              onDelete={(id) => setDeleteId(id)}
+              archived={archivedView}
+              onArchive={(id) => { setActionError(''); setPendingAction({ id, type: 'archive' }); }}
+              onRestore={restoreResume}
+              restoring={restoringId === resume.id}
+              onDelete={(id) => { setActionError(''); setPendingAction({ id, type: 'delete' }); }}
             />
           ))}
         </div>
       ) : (
         <EmptyState
           icon={FileText}
-          title="No resumes uploaded yet"
-          description="Upload your candidate resume in PDF format to extract structured technical skills and calculate ATS match scores."
-          actionText="Upload First Resume"
-          onAction={() => setUploadModalOpen(true)}
+          title={archivedView ? 'No archived resumes' : 'No resumes uploaded yet'}
+          description={archivedView
+            ? 'Archived resumes remain available to their interview and matching history.'
+            : 'Upload a PDF resume to extract skills and calculate job match scores.'}
+          actionText={archivedView ? undefined : 'Upload First Resume'}
+          onAction={archivedView ? undefined : () => setUploadModalOpen(true)}
         />
       )}
 
@@ -292,15 +351,19 @@ export const Resumes = () => {
         </div>
       </Modal>
 
-      {/* Delete Confirmation Dialog */}
+      {/* Archive and permanent-delete confirmation */}
       <ConfirmDialog
-        isOpen={!!deleteId}
-        onClose={() => setDeleteId(null)}
-        onConfirm={confirmDelete}
-        title="Delete Resume"
-        message="Are you sure you want to delete this resume? All associated match results and parsed skills will be permanently removed."
-        confirmText="Delete"
-        loading={deleting}
+        isOpen={!!pendingAction}
+        onClose={closeActionDialog}
+        onConfirm={confirmResumeAction}
+        title={pendingAction?.type === 'archive' ? 'Archive Resume' : 'Delete Resume Permanently'}
+        message={pendingAction?.type === 'archive'
+          ? 'Remove this resume from the active list? Interview and matching history will be kept, and you can restore it later.'
+          : 'Permanently remove this archived resume and its PDF? Deletion will be blocked if history still references it.'}
+        confirmText={pendingAction?.type === 'archive' ? 'Archive' : 'Delete permanently'}
+        confirmVariant={pendingAction?.type === 'archive' ? 'primary' : 'danger'}
+        loading={actionLoading}
+        errorMessage={actionError}
       />
     </div>
   );

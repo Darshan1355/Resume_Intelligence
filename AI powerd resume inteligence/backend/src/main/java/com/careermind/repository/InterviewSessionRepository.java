@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface InterviewSessionRepository extends JpaRepository<InterviewSession, Long> {
     List<InterviewSession> findByUserIdOrderByCreatedAtDesc(Long userId);
     Optional<InterviewSession> findByIdAndUserId(Long id, Long userId);
+    boolean existsByResumeId(Long resumeId);
 
     @Query("SELECT s FROM InterviewSession s LEFT JOIN FETCH s.questions q LEFT JOIN FETCH q.answer WHERE s.id = :id AND s.user.id = :userId")
     Optional<InterviewSession> findByIdAndUserIdWithQuestionsAndAnswers(@Param("id") Long id, @Param("userId") Long userId);

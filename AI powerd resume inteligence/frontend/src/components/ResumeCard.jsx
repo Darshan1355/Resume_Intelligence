@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FileText, Trash2, ExternalLink, GitCompare, Clock, Layers } from 'lucide-react';
+import { FileText, Trash2, ExternalLink, GitCompare, Clock, Layers, Archive, RotateCcw } from 'lucide-react';
 import Badge from './Badge';
 
-export const ResumeCard = ({ resume, onDelete, onAnalyze }) => {
+export const ResumeCard = ({ resume, archived = false, onArchive, onRestore, onDelete, restoring = false }) => {
   const formatFileSize = (bytes) => {
     if (!bytes) return '0 KB';
     const kb = bytes / 1024;
@@ -26,8 +26,8 @@ export const ResumeCard = ({ resume, onDelete, onAnalyze }) => {
               <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{resume.candidateName}</p>
             </div>
           </div>
-          <Badge variant={resume.status === 'PROCESSED' ? 'success' : 'default'} size="sm">
-            {resume.status}
+          <Badge variant={!archived && resume.status === 'PROCESSED' ? 'success' : 'default'} size="sm">
+            {archived ? 'Archived' : resume.status}
           </Badge>
         </div>
 
@@ -52,23 +52,52 @@ export const ResumeCard = ({ resume, onDelete, onAnalyze }) => {
             <ExternalLink className="h-3.5 w-3.5" />
             View
           </Link>
-          <span className="text-slate-300 dark:text-slate-700">•</span>
-          <Link
-            to={`/matching?resumeId=${resume.id}`}
-            className="text-brand-600 dark:text-brand-400 hover:text-brand-500 font-semibold flex items-center gap-1"
-          >
-            <GitCompare className="h-3.5 w-3.5" />
-            Match
-          </Link>
+          {!archived && (
+            <>
+              <span className="text-slate-300 dark:text-slate-700">•</span>
+              <Link
+                to={`/matching?resumeId=${resume.id}`}
+                className="text-brand-600 dark:text-brand-400 hover:text-brand-500 font-semibold flex items-center gap-1"
+              >
+                <GitCompare className="h-3.5 w-3.5" />
+                Match
+              </Link>
+            </>
+          )}
         </div>
 
-        <button
-          onClick={() => onDelete(resume.id)}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
-          title="Delete Resume"
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-        </button>
+        <div className="flex items-center gap-1">
+          {archived ? (
+            <>
+              <button
+                onClick={() => onRestore(resume.id)}
+                disabled={restoring}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-950/40 transition-colors disabled:opacity-50"
+                title="Restore Resume"
+                aria-label="Restore resume"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+              </button>
+              <button
+                onClick={() => onDelete(resume.id)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                title="Delete Permanently"
+                aria-label="Delete resume permanently"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => onArchive(resume.id)}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-950/40 transition-colors"
+              title="Archive Resume"
+              aria-label="Archive resume"
+            >
+              <Archive className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
