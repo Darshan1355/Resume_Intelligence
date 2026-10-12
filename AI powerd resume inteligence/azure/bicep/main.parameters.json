@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "eastus"
+    },
+    "prefix": {
+      "value": "careermind"
+    },
+    "environment": {
+      "value": "prod"
+    },
+    "dbAdminUsername": {
+      "value": "careermind"
+    },
+    "dbAdminPassword": {
+      "value": "CareerMindSecure2026!#"
+    },
+    "jwtSecret": {
+      "value": "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+    },
+    "imageTag": {
+      "value": "latest"
+    }
+  }
+}

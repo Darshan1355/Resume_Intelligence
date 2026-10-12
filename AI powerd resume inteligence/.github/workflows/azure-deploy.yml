@@ -1,0 +1,62 @@
+name: Deploy CareerMind to Microsoft Azure
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy Azure Infrastructure (Bicep)
+        id: bicep
+        uses: azure/arm-deploy@v2
+        with:
+          scope: resourcegroup
+          resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP || 'rg-careermind-prod' }}
+          template: ./azure/bicep/main.bicep
+          parameters: >
+            location=${{ secrets.AZURE_LOCATION || 'eastus' }}
+            prefix=careermind
+            environment=prod
+            dbAdminPassword=${{ secrets.AZURE_MYSQL_PASSWORD }}
+            jwtSecret=${{ secrets.JWT_SECRET }}
+            imageTag=${{ github.sha }}
+
+      - name: Build and Push Docker Images to ACR
+        run: |
+          ACR_SERVER="${{ steps.bicep.outputs.acrLoginServer }}"
+          ACR_NAME=$(echo $ACR_SERVER | cut -d'.' -f1)
+
+          echo "Building in Azure ACR: $ACR_NAME"
+          az acr build --registry $ACR_NAME --image careermind-ml-service:${{ github.sha }} ./ml-service
+          az acr build --registry $ACR_NAME --image careermind-backend:${{ github.sha }} ./backend
+          az acr build --registry $ACR_NAME --image careermind-frontend:${{ github.sha }} ./frontend
+
+      - name: Update Container Apps with New Images
+        run: |
+          RG="${{ secrets.AZURE_RESOURCE_GROUP || 'rg-careermind-prod' }}"
+          ACR_SERVER="${{ steps.bicep.outputs.acrLoginServer }}"
+
+          echo "Deploying new revision to careermind-ml..."
+          az containerapp update --name careermind-ml --resource-group $RG --image $ACR_SERVER/careermind-ml-service:${{ github.sha }}
+
+          echo "Deploying new revision to careermind-backend..."
+          az containerapp update --name careermind-backend --resource-group $RG --image $ACR_SERVER/careermind-backend:${{ github.sha }}
+
+          echo "Deploying new revision to careermind-frontend..."
+          az containerapp update --name careermind-frontend --resource-group $RG --image $ACR_SERVER/careermind-frontend:${{ github.sha }}

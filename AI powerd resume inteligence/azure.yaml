@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+name: careermind-azure
+metadata:
+  template: careermind-resume-intelligence@1.0.0
+services:
+  ml-service:
+    project: ./ml-service
+    language: python
+    host: containerapp
+    docker:
+      path: ./Dockerfile
+      context: ./
+
+  backend:
+    project: ./backend
+    language: java
+    host: containerapp
+    docker:
+      path: ./Dockerfile
+      context: ./
+
+  frontend:
+    project: ./frontend
+    language: js
+    host: containerapp
+    docker:
+      path: ./Dockerfile
+      context: ./
+
+infra:
+  provider: bicep
+  path: ./azure/bicep
