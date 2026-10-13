@@ -31,7 +31,7 @@ public class InterviewQuestion {
     private String questionText;
 
     @Lob
-    @Column(name = "expected_concepts", columnDefinition = "JSON")
+    @Column(name = "expected_concepts", columnDefinition = "LONGTEXT")
     private String expectedConcepts;
 
     @Lob

@@ -59,7 +59,7 @@ public class MatchResult {
     private Double baselineTfidfScore = 0.0;
 
     @Lob
-    @Column(name = "explanation_json", columnDefinition = "JSON")
+    @Column(name = "explanation_json", columnDefinition = "LONGTEXT")
     private String explanationJson;
 
     @OneToMany(mappedBy = "matchResult", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -45,7 +45,7 @@ public class Job {
     private String educationRequired = "Bachelor";
 
     @Lob
-    @Column(name = "embedding_vector", columnDefinition = "JSON")
+    @Column(name = "embedding_vector", columnDefinition = "LONGTEXT")
     private String embeddingVector;
 
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)

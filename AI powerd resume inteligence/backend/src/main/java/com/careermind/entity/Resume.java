@@ -56,7 +56,7 @@ public class Resume {
     private Double candidateExperienceYears = 0.0;
 
     @Lob
-    @Column(name = "parsed_sections", columnDefinition = "JSON")
+    @Column(name = "parsed_sections", columnDefinition = "LONGTEXT")
     private String parsedSections;
 
     @Column(nullable = false, length = 50)

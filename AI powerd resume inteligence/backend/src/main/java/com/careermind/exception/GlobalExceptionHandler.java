@@ -49,13 +49,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
-        log.warn("Request violates a data relationship constraint: {}", ex.getMostSpecificCause().getMessage());
+        String detail = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage() : ex.getMessage();
+        log.warn("Request violates a data relationship constraint: {}", detail);
+        String userMessage = (detail != null && (detail.toLowerCase().contains("foreign key") || detail.toLowerCase().contains("delete")))
+                ? "This record is linked to other data and cannot be deleted."
+                : (detail != null ? detail : "Data relationship constraint violation");
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ErrorResponse.builder()
                         .timestamp(Instant.now())
                         .status(HttpStatus.CONFLICT.value())
                         .error("CONFLICT")
-                        .message("This record is linked to other data and cannot be deleted.")
+                        .message(userMessage)
                         .path(request.getRequestURI())
                         .build());
     }
