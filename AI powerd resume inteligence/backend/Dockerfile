@@ -8,9 +8,11 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup \
+    && mkdir -p /app/uploads/resumes \
+    && chown -R appuser:appgroup /app
 USER appuser
-COPY --from=builder /app/target/careermind-backend-1.0.0.jar app.jar
+COPY --from=builder --chown=appuser:appgroup /app/target/careermind-backend-1.0.0.jar app.jar
 ENV PORT=8080
 EXPOSE 8080
 ENTRYPOINT ["java", "-Xms128m", "-Xmx512m", "-Dserver.port=${PORT}", "-jar", "app.jar"]
