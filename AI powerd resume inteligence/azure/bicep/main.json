@@ -1,0 +1,1022 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.48.1.52935",
+      "templateHash": "2474550578459294575"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Deployment location"
+      }
+    },
+    "prefix": {
+      "type": "string",
+      "defaultValue": "careermind",
+      "minLength": 3,
+      "maxLength": 15,
+      "metadata": {
+        "description": "Prefix for resource names (lowercase alphanumeric)"
+      }
+    },
+    "environment": {
+      "type": "string",
+      "defaultValue": "prod",
+      "metadata": {
+        "description": "Environment suffix (dev, staging, prod)"
+      }
+    },
+    "dbAdminUsername": {
+      "type": "string",
+      "defaultValue": "careermind",
+      "metadata": {
+        "description": "MySQL Administrator Login"
+      }
+    },
+    "dbAdminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "MySQL Administrator Password"
+      }
+    },
+    "jwtSecret": {
+      "type": "securestring",
+      "defaultValue": "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970",
+      "metadata": {
+        "description": "JWT Secret Key (min 32 characters)"
+      }
+    },
+    "imageTag": {
+      "type": "string",
+      "defaultValue": "latest",
+      "metadata": {
+        "description": "Docker Image Tag to deploy"
+      }
+    }
+  },
+  "variables": {
+    "uniqueSuffix": "[uniqueString(resourceGroup().id)]",
+    "acrName": "[format('{0}acr{1}', parameters('prefix'), variables('uniqueSuffix'))]",
+    "mysqlServerName": "[format('{0}-mysql-{1}', parameters('prefix'), variables('uniqueSuffix'))]",
+    "environmentName": "[format('{0}-aca-env-{1}', parameters('prefix'), parameters('environment'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "acrDeployment",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "acrName": {
+            "value": "[variables('acrName')]"
+          },
+          "acrSku": {
+            "value": "Basic"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.48.1.52935",
+              "templateHash": "11843724608126851505"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]",
+              "metadata": {
+                "description": "Location for all resources"
+              }
+            },
+            "acrName": {
+              "type": "string",
+              "metadata": {
+                "description": "ACR Name (must be globally unique and alphanumeric)"
+              }
+            },
+            "acrSku": {
+              "type": "string",
+              "defaultValue": "Basic",
+              "allowedValues": [
+                "Basic",
+                "Standard",
+                "Premium"
+              ],
+              "metadata": {
+                "description": "ACR SKU"
+              }
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.ContainerRegistry/registries",
+              "apiVersion": "2023-07-01",
+              "name": "[parameters('acrName')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "[parameters('acrSku')]"
+              },
+              "properties": {
+                "adminUserEnabled": true
+              }
+            }
+          ],
+          "outputs": {
+            "acrId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.ContainerRegistry/registries', parameters('acrName'))]"
+            },
+            "loginServer": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.ContainerRegistry/registries', parameters('acrName')), '2023-07-01').loginServer]"
+            },
+            "acrAdminUsername": {
+              "type": "string",
+              "value": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('acrName')), '2023-07-01').username]"
+            },
+            "acrAdminPassword": {
+              "type": "string",
+              "value": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('acrName')), '2023-07-01').passwords[0].value]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "mysqlDeployment",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "serverName": {
+            "value": "[variables('mysqlServerName')]"
+          },
+          "adminLogin": {
+            "value": "[parameters('dbAdminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('dbAdminPassword')]"
+          },
+          "databaseName": {
+            "value": "careermind_db"
+          },
+          "skuName": {
+            "value": "Standard_B1ms"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.48.1.52935",
+              "templateHash": "8815076108368824509"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]",
+              "metadata": {
+                "description": "Location for MySQL Server"
+              }
+            },
+            "serverName": {
+              "type": "string",
+              "metadata": {
+                "description": "MySQL Server Name"
+              }
+            },
+            "adminLogin": {
+              "type": "string",
+              "defaultValue": "careermind",
+              "metadata": {
+                "description": "MySQL Admin Username"
+              }
+            },
+            "adminPassword": {
+              "type": "securestring",
+              "metadata": {
+                "description": "MySQL Admin Password"
+              }
+            },
+            "databaseName": {
+              "type": "string",
+              "defaultValue": "careermind_db",
+              "metadata": {
+                "description": "Database Name"
+              }
+            },
+            "skuName": {
+              "type": "string",
+              "defaultValue": "Standard_B1ms",
+              "metadata": {
+                "description": "Compute SKU for MySQL Flexible Server"
+              }
+            },
+            "version": {
+              "type": "string",
+              "defaultValue": "8.0.21",
+              "metadata": {
+                "description": "MySQL Version"
+              }
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.DBforMySQL/flexibleServers",
+              "apiVersion": "2023-12-30",
+              "name": "[parameters('serverName')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "[parameters('skuName')]",
+                "tier": "Burstable"
+              },
+              "properties": {
+                "administratorLogin": "[parameters('adminLogin')]",
+                "administratorLoginPassword": "[parameters('adminPassword')]",
+                "version": "[parameters('version')]",
+                "storage": {
+                  "storageSizeGB": 20,
+                  "iops": 360,
+                  "autoGrow": "Enabled"
+                },
+                "backup": {
+                  "backupRetentionDays": 7,
+                  "geoRedundantBackup": "Disabled"
+                },
+                "highAvailability": {
+                  "mode": "Disabled"
+                }
+              }
+            },
+            {
+              "type": "Microsoft.DBforMySQL/flexibleServers/firewallRules",
+              "apiVersion": "2023-12-30",
+              "name": "[format('{0}/{1}', parameters('serverName'), 'AllowAzureServices')]",
+              "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.DBforMySQL/flexibleServers', parameters('serverName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.DBforMySQL/flexibleServers/databases",
+              "apiVersion": "2023-12-30",
+              "name": "[format('{0}/{1}', parameters('serverName'), parameters('databaseName'))]",
+              "properties": {
+                "charset": "utf8mb4",
+                "collation": "utf8mb4_unicode_ci"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.DBforMySQL/flexibleServers', parameters('serverName'))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "fqdn": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.DBforMySQL/flexibleServers', parameters('serverName')), '2023-12-30').fullyQualifiedDomainName]"
+            },
+            "adminLogin": {
+              "type": "string",
+              "value": "[parameters('adminLogin')]"
+            },
+            "databaseName": {
+              "type": "string",
+              "value": "[parameters('databaseName')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "acaEnvDeployment",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "environmentName": {
+            "value": "[variables('environmentName')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.48.1.52935",
+              "templateHash": "16764461998523553309"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]",
+              "metadata": {
+                "description": "Location for Container Apps Environment"
+              }
+            },
+            "environmentName": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment Name"
+              }
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.OperationalInsights/workspaces",
+              "apiVersion": "2023-09-01",
+              "name": "[format('{0}-logs', parameters('environmentName'))]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "sku": {
+                  "name": "PerGB2018"
+                },
+                "retentionInDays": 30
+              }
+            },
+            {
+              "type": "Microsoft.App/managedEnvironments",
+              "apiVersion": "2024-03-01",
+              "name": "[parameters('environmentName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "appLogsConfiguration": {
+                  "destination": "log-analytics",
+                  "logAnalyticsConfiguration": {
+                    "customerId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', format('{0}-logs', parameters('environmentName'))), '2023-09-01').customerId]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces', format('{0}-logs', parameters('environmentName'))), '2023-09-01').primarySharedKey]"
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', format('{0}-logs', parameters('environmentName')))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "environmentId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.App/managedEnvironments', parameters('environmentName'))]"
+            },
+            "defaultDomain": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.App/managedEnvironments', parameters('environmentName')), '2024-03-01').defaultDomain]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "mlServiceDeployment",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "appName": {
+            "value": "careermind-ml"
+          },
+          "environmentId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'acaEnvDeployment'), '2025-04-01').outputs.environmentId.value]"
+          },
+          "acrLoginServer": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'acrDeployment'), '2025-04-01').outputs.loginServer.value]"
+          },
+          "acrUsername": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'acrDeployment'), '2025-04-01').outputs.acrAdminUsername.value]"
+          },
+          "acrPassword": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'acrDeployment'), '2025-04-01').outputs.acrAdminPassword.value]"
+          },
+          "imageTag": {
+            "value": "[parameters('imageTag')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.48.1.52935",
+              "templateHash": "2369860342763171403"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]",
+              "metadata": {
+                "description": "Location for ML Service"
+              }
+            },
+            "appName": {
+              "type": "string",
+              "defaultValue": "careermind-ml-service",
+              "metadata": {
+                "description": "Container App Name"
+              }
+            },
+            "environmentId": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment Resource ID"
+              }
+            },
+            "acrLoginServer": {
+              "type": "string",
+              "metadata": {
+                "description": "ACR Login Server"
+              }
+            },
+            "acrUsername": {
+              "type": "string",
+              "metadata": {
+                "description": "ACR Admin Username"
+              }
+            },
+            "acrPassword": {
+              "type": "securestring",
+              "metadata": {
+                "description": "ACR Admin Password"
+              }
+            },
+            "imageTag": {
+              "type": "string",
+              "defaultValue": "latest",
+              "metadata": {
+                "description": "Docker Image Tag"
+              }
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.App/containerApps",
+              "apiVersion": "2024-03-01",
+              "name": "[parameters('appName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "managedEnvironmentId": "[parameters('environmentId')]",
+                "configuration": {
+                  "secrets": [
+                    {
+                      "name": "acr-password",
+                      "value": "[parameters('acrPassword')]"
+                    }
+                  ],
+                  "registries": [
+                    {
+                      "server": "[parameters('acrLoginServer')]",
+                      "username": "[parameters('acrUsername')]",
+                      "passwordSecretRef": "acr-password"
+                    }
+                  ],
+                  "ingress": {
+                    "external": false,
+                    "targetPort": 8000,
+                    "transport": "auto",
+                    "allowInsecure": false
+                  }
+                },
+                "template": {
+                  "containers": [
+                    {
+                      "name": "ml-service",
+                      "image": "[format('{0}/careermind-ml-service:{1}', parameters('acrLoginServer'), parameters('imageTag'))]",
+                      "resources": {
+                        "cpu": "[json('1.0')]",
+                        "memory": "2.0Gi"
+                      },
+                      "env": [
+                        {
+                          "name": "PORT",
+                          "value": "8000"
+                        }
+                      ]
+                    }
+                  ],
+                  "scale": {
+                    "minReplicas": 1,
+                    "maxReplicas": 3
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "fqdn": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.App/containerApps', parameters('appName')), '2024-03-01').configuration.ingress.fqdn]"
+            },
+            "internalUrl": {
+              "type": "string",
+              "value": "[format('http://{0}', parameters('appName'))]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'acaEnvDeployment')]",
+        "[resourceId('Microsoft.Resources/deployments', 'acrDeployment')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "backendDeployment",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "appName": {
+            "value": "careermind-backend"
+          },
+          "environmentId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'acaEnvDeployment'), '2025-04-01').outputs.environmentId.value]"
+          },
+          "acrLoginServer": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'acrDeployment'), '2025-04-01').outputs.loginServer.value]"
+          },
+          "acrUsername": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'acrDeployment'), '2025-04-01').outputs.acrAdminUsername.value]"
+          },
+          "acrPassword": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'acrDeployment'), '2025-04-01').outputs.acrAdminPassword.value]"
+          },
+          "imageTag": {
+            "value": "[parameters('imageTag')]"
+          },
+          "dbHost": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'mysqlDeployment'), '2025-04-01').outputs.fqdn.value]"
+          },
+          "dbName": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'mysqlDeployment'), '2025-04-01').outputs.databaseName.value]"
+          },
+          "dbUsername": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'mysqlDeployment'), '2025-04-01').outputs.adminLogin.value]"
+          },
+          "dbPassword": {
+            "value": "[parameters('dbAdminPassword')]"
+          },
+          "mlServiceUrl": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'mlServiceDeployment'), '2025-04-01').outputs.internalUrl.value]"
+          },
+          "jwtSecret": {
+            "value": "[parameters('jwtSecret')]"
+          },
+          "enableExternalIngress": {
+            "value": true
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.48.1.52935",
+              "templateHash": "5138765632942162766"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]",
+              "metadata": {
+                "description": "Location for Backend Service"
+              }
+            },
+            "appName": {
+              "type": "string",
+              "defaultValue": "careermind-backend",
+              "metadata": {
+                "description": "Container App Name"
+              }
+            },
+            "environmentId": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment Resource ID"
+              }
+            },
+            "acrLoginServer": {
+              "type": "string",
+              "metadata": {
+                "description": "ACR Login Server"
+              }
+            },
+            "acrUsername": {
+              "type": "string",
+              "metadata": {
+                "description": "ACR Admin Username"
+              }
+            },
+            "acrPassword": {
+              "type": "securestring",
+              "metadata": {
+                "description": "ACR Admin Password"
+              }
+            },
+            "imageTag": {
+              "type": "string",
+              "defaultValue": "latest",
+              "metadata": {
+                "description": "Docker Image Tag"
+              }
+            },
+            "dbHost": {
+              "type": "string",
+              "metadata": {
+                "description": "MySQL Host FQDN"
+              }
+            },
+            "dbName": {
+              "type": "string",
+              "metadata": {
+                "description": "MySQL Database Name"
+              }
+            },
+            "dbUsername": {
+              "type": "string",
+              "metadata": {
+                "description": "MySQL Username"
+              }
+            },
+            "dbPassword": {
+              "type": "securestring",
+              "metadata": {
+                "description": "MySQL Password"
+              }
+            },
+            "mlServiceUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "Internal ML Service URL"
+              }
+            },
+            "jwtSecret": {
+              "type": "securestring",
+              "metadata": {
+                "description": "JWT Secret Key"
+              }
+            },
+            "enableExternalIngress": {
+              "type": "bool",
+              "defaultValue": true,
+              "metadata": {
+                "description": "Allow external ingress to backend for Swagger UI"
+              }
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.App/containerApps",
+              "apiVersion": "2024-03-01",
+              "name": "[parameters('appName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "managedEnvironmentId": "[parameters('environmentId')]",
+                "configuration": {
+                  "secrets": [
+                    {
+                      "name": "acr-password",
+                      "value": "[parameters('acrPassword')]"
+                    },
+                    {
+                      "name": "db-password",
+                      "value": "[parameters('dbPassword')]"
+                    },
+                    {
+                      "name": "jwt-secret",
+                      "value": "[parameters('jwtSecret')]"
+                    }
+                  ],
+                  "registries": [
+                    {
+                      "server": "[parameters('acrLoginServer')]",
+                      "username": "[parameters('acrUsername')]",
+                      "passwordSecretRef": "acr-password"
+                    }
+                  ],
+                  "ingress": {
+                    "external": "[parameters('enableExternalIngress')]",
+                    "targetPort": 8080,
+                    "transport": "auto",
+                    "allowInsecure": false,
+                    "corsPolicy": {
+                      "allowedOrigins": [
+                        "*"
+                      ],
+                      "allowedMethods": [
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "DELETE",
+                        "OPTIONS"
+                      ],
+                      "allowedHeaders": [
+                        "*"
+                      ]
+                    }
+                  }
+                },
+                "template": {
+                  "containers": [
+                    {
+                      "name": "backend",
+                      "image": "[format('{0}/careermind-backend:{1}', parameters('acrLoginServer'), parameters('imageTag'))]",
+                      "resources": {
+                        "cpu": "[json('0.5')]",
+                        "memory": "1.0Gi"
+                      },
+                      "env": [
+                        {
+                          "name": "PORT",
+                          "value": "8080"
+                        },
+                        {
+                          "name": "DB_URL",
+                          "value": "[format('jdbc:mysql://{0}:3306/{1}?createDatabaseIfNotExist=true&useSSL=true&requireSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true', parameters('dbHost'), parameters('dbName'))]"
+                        },
+                        {
+                          "name": "DB_USERNAME",
+                          "value": "[parameters('dbUsername')]"
+                        },
+                        {
+                          "name": "DB_PASSWORD",
+                          "secretRef": "db-password"
+                        },
+                        {
+                          "name": "DB_DRIVER",
+                          "value": "com.mysql.cj.jdbc.Driver"
+                        },
+                        {
+                          "name": "DB_DIALECT",
+                          "value": "org.hibernate.dialect.MySQLDialect"
+                        },
+                        {
+                          "name": "ML_SERVICE_URL",
+                          "value": "[parameters('mlServiceUrl')]"
+                        },
+                        {
+                          "name": "JWT_SECRET",
+                          "secretRef": "jwt-secret"
+                        }
+                      ]
+                    }
+                  ],
+                  "scale": {
+                    "minReplicas": 1,
+                    "maxReplicas": 3
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "fqdn": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.App/containerApps', parameters('appName')), '2024-03-01').configuration.ingress.fqdn]"
+            },
+            "internalUrl": {
+              "type": "string",
+              "value": "[format('http://{0}', parameters('appName'))]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'acaEnvDeployment')]",
+        "[resourceId('Microsoft.Resources/deployments', 'acrDeployment')]",
+        "[resourceId('Microsoft.Resources/deployments', 'mlServiceDeployment')]",
+        "[resourceId('Microsoft.Resources/deployments', 'mysqlDeployment')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "frontendDeployment",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "appName": {
+            "value": "careermind-frontend"
+          },
+          "environmentId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'acaEnvDeployment'), '2025-04-01').outputs.environmentId.value]"
+          },
+          "acrLoginServer": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'acrDeployment'), '2025-04-01').outputs.loginServer.value]"
+          },
+          "acrUsername": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'acrDeployment'), '2025-04-01').outputs.acrAdminUsername.value]"
+          },
+          "acrPassword": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'acrDeployment'), '2025-04-01').outputs.acrAdminPassword.value]"
+          },
+          "imageTag": {
+            "value": "[parameters('imageTag')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.48.1.52935",
+              "templateHash": "211628813651255253"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]",
+              "metadata": {
+                "description": "Location for Frontend Service"
+              }
+            },
+            "appName": {
+              "type": "string",
+              "defaultValue": "careermind-frontend",
+              "metadata": {
+                "description": "Container App Name"
+              }
+            },
+            "environmentId": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment Resource ID"
+              }
+            },
+            "acrLoginServer": {
+              "type": "string",
+              "metadata": {
+                "description": "ACR Login Server"
+              }
+            },
+            "acrUsername": {
+              "type": "string",
+              "metadata": {
+                "description": "ACR Admin Username"
+              }
+            },
+            "acrPassword": {
+              "type": "securestring",
+              "metadata": {
+                "description": "ACR Admin Password"
+              }
+            },
+            "imageTag": {
+              "type": "string",
+              "defaultValue": "latest",
+              "metadata": {
+                "description": "Docker Image Tag"
+              }
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.App/containerApps",
+              "apiVersion": "2024-03-01",
+              "name": "[parameters('appName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "managedEnvironmentId": "[parameters('environmentId')]",
+                "configuration": {
+                  "secrets": [
+                    {
+                      "name": "acr-password",
+                      "value": "[parameters('acrPassword')]"
+                    }
+                  ],
+                  "registries": [
+                    {
+                      "server": "[parameters('acrLoginServer')]",
+                      "username": "[parameters('acrUsername')]",
+                      "passwordSecretRef": "acr-password"
+                    }
+                  ],
+                  "ingress": {
+                    "external": true,
+                    "targetPort": 80,
+                    "transport": "auto",
+                    "allowInsecure": false
+                  }
+                },
+                "template": {
+                  "containers": [
+                    {
+                      "name": "frontend",
+                      "image": "[format('{0}/careermind-frontend:{1}', parameters('acrLoginServer'), parameters('imageTag'))]",
+                      "resources": {
+                        "cpu": "[json('0.5')]",
+                        "memory": "1.0Gi"
+                      }
+                    }
+                  ],
+                  "scale": {
+                    "minReplicas": 1,
+                    "maxReplicas": 5
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "fqdn": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.App/containerApps', parameters('appName')), '2024-03-01').configuration.ingress.fqdn]"
+            },
+            "url": {
+              "type": "string",
+              "value": "[format('https://{0}', reference(resourceId('Microsoft.App/containerApps', parameters('appName')), '2024-03-01').configuration.ingress.fqdn)]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'acaEnvDeployment')]",
+        "[resourceId('Microsoft.Resources/deployments', 'acrDeployment')]",
+        "[resourceId('Microsoft.Resources/deployments', 'backendDeployment')]"
+      ]
+    }
+  ],
+  "outputs": {
+    "acrLoginServer": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'acrDeployment'), '2025-04-01').outputs.loginServer.value]"
+    },
+    "mysqlHost": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'mysqlDeployment'), '2025-04-01').outputs.fqdn.value]"
+    },
+    "backendUrl": {
+      "type": "string",
+      "value": "[format('https://{0}', reference(resourceId('Microsoft.Resources/deployments', 'backendDeployment'), '2025-04-01').outputs.fqdn.value)]"
+    },
+    "frontendUrl": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'frontendDeployment'), '2025-04-01').outputs.url.value]"
+    },
+    "swaggerUrl": {
+      "type": "string",
+      "value": "[format('https://{0}/swagger-ui.html', reference(resourceId('Microsoft.Resources/deployments', 'backendDeployment'), '2025-04-01').outputs.fqdn.value)]"
+    }
+  }
+}
